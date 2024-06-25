@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><phoneBook>
+    <contact id="karthik">
+        <primaryNumber>12345678</primaryNumber>
+        <secondaryNumber>9876543</secondaryNumber>
+    </contact>
+    <contact id="kumar">
+        <primaryNumber>456789123</primaryNumber>
+        <secondaryNumber>90123476</secondaryNumber>
+    </contact>
+</phoneBook><contact id="ram"><primaryNumber>9090909090</primaryNumber><secondaryNumber>08880808</secondaryNumber></contact>
