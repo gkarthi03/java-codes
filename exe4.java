@@ -31,7 +31,6 @@ public class Exe4
 				System.out.println("Input is Not an Integer Try With An Integer Value:");
 			}
 		}
-		
 	}
 	
 	public static int Fibonacci(int num)
