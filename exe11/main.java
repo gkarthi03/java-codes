@@ -1,6 +1,7 @@
 import java.util.Scanner;
+import java.util.Vector;
 import java.io.*;
-
+import java.util.Collections;
 import java.util.Hashtable;
 
 import java.nio.file.Files;
@@ -10,7 +11,7 @@ import java.nio.file.Paths;
 public class Main
 {
     public static Scanner sc = new Scanner(System.in);
-    public static Hashtable<String,Long> contactData = new Hashtable<String,Long>();
+    public static Hashtable<String,Contact> contactData = new Hashtable<String,Contact>();
     
 	public static void main(String[] args) throws IOException {
 	    Path path = Paths.get("phoneBook.txt");
@@ -48,7 +49,7 @@ public class Main
 		    }
 		}
 		catch(FileNotFoundException e) {
-		    //
+		    e.printStackTrace();
 		}
 	}
 	
@@ -56,17 +57,22 @@ public class Main
 	{
 	    if(!data.isEmpty())
 	    {
-	        data = data.replace('{',' ');
-	        data = data.replace('}',' ');
-	        data = data.trim();
 	        String[] tempData = data.split(",");
 	        for(String i:tempData)
 	        {
-	            String[] maindata = i.split("=");
+	            String[] maindata = i.split("_");
 	            String name = maindata[0];
-	            name = name.trim();
-	            Long num = Long.parseLong(maindata[1]);
-	            contactData.put(name,num);
+	            Long num1 = Long.parseLong(maindata[1]);
+				if (maindata[2] != "null") {
+					Long num2 = Long.parseLong(maindata[2]);
+					Contact newContact = new Contact(num1,num2);
+					contactData.put(name, newContact);
+				}
+				else
+				{
+					Contact newContact = new Contact(num1);
+					contactData.put(name, newContact);
+				}
 	        }
 	    }
 	}
@@ -79,12 +85,22 @@ public class Main
 	    {
 	        System.out.println("Enter Number:");
 	        Long PhoneNumber = sc.nextLong();
-	    
-	        contactData.put(Name,PhoneNumber);
+			Contact newContact = new Contact(PhoneNumber);
+	        contactData.put(Name,newContact);
 	    }
 	    else
 	    {
 	        System.out.println("Contact Already Present");
+			if (contactData.get(Name).secondaryPhoneNumber == null) {
+				System.out.println("Press 1 To Add As Secondary Number");
+				if (sc.nextInt() == 1) {
+					System.out.println("Enter Number:");
+	        		Long PhoneNumber = sc.nextLong();
+					Contact newContact = new Contact(contactData.get(Name).primaryPhoneNumber,PhoneNumber);
+	        		contactData.put(Name,newContact);
+				}
+				
+			}
 	    }
 	}
 	
@@ -92,8 +108,8 @@ public class Main
 	{
 	    System.out.println("Enter Contact Name To Be Deleted:");
 	    String Name_del = sc.next();
-	    Long val = contactData.get(Name_del);
-	    if(val == null)
+
+	    if(!contactData.containsKey(Name_del))
 	    {
 	        System.out.println("Contact Not Found");
 	    }
@@ -107,23 +123,44 @@ public class Main
 	{
 	    System.out.println("Enter Name To Be Searched:");
 	    String search_Name = sc.next();
-	    Long val = contactData.get(search_Name);
-	    if(val == null)
-	    {
-	        System.out.println("Contact Not Found");
-	    }
-	    else
-	    {
-	        System.out.println("Name:"+search_Name+" "+"Number:"+val);
-	    }
+		if (contactData.containsKey(search_Name)) 
+		{
+			Long val = contactData.get(search_Name).primaryPhoneNumber;
+			if (contactData.get(search_Name).secondaryPhoneNumber != null) 
+			{
+				Long val2 = contactData.get(search_Name).secondaryPhoneNumber;
+				System.out.println("Name:"+search_Name+" "+"Primary Number:"+val+" Secondary Number:"+val2);
+			}
+			else
+			{
+				System.out.println("Name:"+search_Name+" "+"Number:"+val);
+			}
+		}
+		else
+		{
+			System.out.println("Contact Not Found");
+		}
 	}
 	
 	public static void viewContact()
 	{
 	    if (!contactData.isEmpty())
 	    {
-	        contactData.forEach(
-	            (key,value) -> System.out.println("Name:"+key+" "+"Number:"+value));
+			Vector<String> contactList = new Vector<String>();
+			contactData.forEach((key,value)->contactList.add(key));
+			Collections.sort(contactList);
+
+			for(String i : contactList)
+			{
+				if (contactData.get(i).secondaryPhoneNumber == null) {
+					System.out.println("Name:"+i+" "+"Number:"+contactData.get(i).primaryPhoneNumber);
+				}
+				else
+				{
+					System.out.println("Name:"+i+" Primary Number:"+contactData.get(i).primaryPhoneNumber+" Secondary Number:"+contactData.get(i).secondaryPhoneNumber);
+				}
+				
+			}
 	    }
 	    else
 	    {
@@ -135,14 +172,15 @@ public class Main
 	{
 	    
 	    Path path = Paths.get("phoneBook.txt");
-	    String data = contactData.toString();
-	   
+		StringBuffer data = new StringBuffer();
+		contactData.forEach((key,value) -> data.append(key+"_"+contactData.get(key).primaryPhoneNumber+"_"+contactData.get(key).secondaryPhoneNumber+","));
+	    
 	    try {
 	        Files.writeString(path, data);
 	    }
 	    catch(Exception e)
 	    {
-	        //
+	        e.printStackTrace();
 	    }
 	}
 }
