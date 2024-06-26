@@ -1,12 +1,13 @@
-import java.util.Scanner;
 import java.io.*;
 
-public class exe6
+public class Exe6
 {
 	public static void main(String[] args) throws IOException
 	{
-	    Scanner sc = new Scanner(System.in);
-	    String fileName = sc.nextLine();
+	    //Scanner sc = new Scanner(System.in);
+	    //String fileName = sc.nextLine();
+
+		String fileName = args[0];
 	   
 		try
 		{
