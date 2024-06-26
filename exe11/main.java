@@ -12,7 +12,7 @@ public class Main
 {
     public static Scanner sc = new Scanner(System.in);
     public static Hashtable<String,Contact> contactData = new Hashtable<String,Contact>();
-    
+
 	public static void main(String[] args) throws IOException {
 	    Path path = Paths.get("phoneBook.txt");
 	    
@@ -41,7 +41,7 @@ public class Main
 		            case 4:
 		                searchContact();
 		                break;
-		            case 5:
+		            default:
 		                writeInFile();
 		                control = false;
 		                break;
@@ -63,7 +63,9 @@ public class Main
 	            String[] maindata = i.split("_");
 	            String name = maindata[0];
 	            Long num1 = Long.parseLong(maindata[1]);
-				if (maindata[2] != "null") {
+				
+				if (!maindata[2].equals("###")) {
+					System.out.println(maindata[2].toString());
 					Long num2 = Long.parseLong(maindata[2]);
 					Contact newContact = new Contact(num1,num2);
 					contactData.put(name, newContact);
@@ -159,7 +161,6 @@ public class Main
 				{
 					System.out.println("Name:"+i+" Primary Number:"+contactData.get(i).primaryPhoneNumber+" Secondary Number:"+contactData.get(i).secondaryPhoneNumber);
 				}
-				
 			}
 	    }
 	    else
@@ -170,10 +171,10 @@ public class Main
 	
 	public static void writeInFile()
 	{
-	    
 	    Path path = Paths.get("phoneBook.txt");
 		StringBuffer data = new StringBuffer();
-		contactData.forEach((key,value) -> data.append(key+"_"+contactData.get(key).primaryPhoneNumber+"_"+contactData.get(key).secondaryPhoneNumber+","));
+		contactData.forEach((key,value) -> data.append(key+"_"+contactData.get(key).primaryPhoneNumber+"_"+ 
+		((contactData.get(key).secondaryPhoneNumber == null) ? "###" : contactData.get(key).secondaryPhoneNumber) +","));
 	    
 	    try {
 	        Files.writeString(path, data);
