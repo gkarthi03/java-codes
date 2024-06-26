@@ -1,7 +1,5 @@
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.security.Signature;
-import java.util.Scanner;
 
 import javax.crypto.Cipher;
 
@@ -9,9 +7,6 @@ public class Exe8 {
 
     public static void main(String[] args) throws Exception
     {
-        
-	        Signature sign = Signature.getInstance("SHA256withDSA");
-      
 	        KeyPairGenerator keyPair = KeyPairGenerator.getInstance("RSA");
 		    keyPair.initialize(2048);
 		
@@ -20,9 +15,19 @@ public class Exe8 {
 		    Cipher cipher = Cipher.getInstance("RSA");
 		
 		    cipher.init(Cipher.ENCRYPT_MODE, key.getPublic());
-		
-		    Scanner sc = new Scanner(System.in);
-		    String str = sc.nextLine();
+
+            String str = "";
+
+           for(int i=0;i<args.length;i++)
+           {
+                if (i != args.length-1) {
+                    str += args[i]+" ";
+                }
+                else
+                {
+                    str += args[i];
+                }
+           }
 		
 		    cipher.update(str.getBytes());
 		
