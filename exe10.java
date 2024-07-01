@@ -1,14 +1,15 @@
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.Scanner;
-public class exe10
+import java.util.Vector;
+public class Exe10
 {
     
 	public static void main(String[] args) 
 	{
 	    Scanner sc = new Scanner(System.in);
 	    
-	    Queue<String> dataQueue = new LinkedList<String>();
+	    Vector<String> dataQueue = new Vector<String>(); 
 	    boolean run = true;
 	    while(run)
 	    {
@@ -17,12 +18,13 @@ public class exe10
 	        switch(option)
 	        {
 	            case 1:
-	                System.out.println("Enter Element To Add:");
-	                String Element = sc.next();
-	                dataQueue.add(Element);
+					System.out.println("Enter the Element to be added:");
+					dataQueue.add(sc.next());
+					System.out.println("Queue: "+dataQueue);
 	                break;
 	           case 2:
-	                String del_Element = dataQueue.remove();
+	                dataQueue.remove(dataQueue.getFirst());
+					System.out.println("Queue: "+dataQueue);
 	                break;
 	           case 3:
 	                for (String i:dataQueue)
