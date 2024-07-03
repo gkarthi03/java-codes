@@ -24,7 +24,8 @@ public class Server {
                 switch (option) {
                     case 1:
                         System.out.println("Enter The Message:");
-                        String msg = sc.next();
+                        sc.nextLine();
+                        String msg = sc.nextLine();
                         sendMessage.writeUTF(msg);
                         break;
                         
